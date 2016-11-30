@@ -36,7 +36,6 @@
   },
   "main": "dist/amazon-cognito-identity.min.js",
   "dependencies": {
-    "aws-sdk": "^2.6.0",
     "jsbn": "^0.1.0",
     "sjcl": "^1.0.3"
   },

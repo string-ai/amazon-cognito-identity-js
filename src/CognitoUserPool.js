@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider';
+//import CognitoIdentityServiceProvider from 'aws-sdk/clients/cognitoidentityserviceprovider';
+
+import RequestFetch from './RequestFetch' 
 
 import CognitoUser from './CognitoUser';
 
@@ -42,7 +44,8 @@ export default class CognitoUserPool {
     this.clientId = ClientId;
     this.paranoia = Paranoia || 0;
 
-    this.client = new CognitoIdentityServiceProvider({ apiVersion: '2016-04-19', region });
+    //this.client = new CognitoIdentityServiceProvider({ apiVersion: '2016-04-19', region });
+    this.client = new RequestFetch();
   }
 
   /**
@@ -90,7 +93,7 @@ export default class CognitoUserPool {
    * @returns {void}
    */
   signUp(username, password, userAttributes, validationData, callback) {
-    this.client.makeUnauthenticatedRequest('signUp', {
+    this.client.makeUnauthenticatedRequest('SignUp', {
       ClientId: this.clientId,
       Username: username,
       Password: password,

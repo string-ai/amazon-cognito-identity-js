@@ -155,7 +155,7 @@ export default class CognitoUser {
       authParameters.CHALLENGE_NAME = 'SRP_A';
     }
 
-    this.client.makeUnauthenticatedRequest('initiateAuth', {
+    this.client.makeUnauthenticatedRequest('InitiateAuth', {
       AuthFlow: this.authenticationFlowType,
       ClientId: this.pool.getClientId(),
       AuthParameters: authParameters,
@@ -200,7 +200,7 @@ export default class CognitoUser {
       }
 
       const respondToAuthChallenge = (challenge, challengeCallback) =>
-        this.client.makeUnauthenticatedRequest('respondToAuthChallenge', challenge,
+        this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', challenge,
           (errChallenge, dataChallenge) => {
             if (errChallenge && errChallenge.code === 'ResourceNotFoundException' &&
                 errChallenge.message.toLowerCase().indexOf('device') !== -1) {
@@ -302,7 +302,7 @@ export default class CognitoUser {
     this.deviceGroupKey = newDeviceMetadata.DeviceGroupKey;
     this.randomPassword = authenticationHelper.getRandomPassword();
 
-    this.client.makeUnauthenticatedRequest('confirmDevice', {
+    this.client.makeUnauthenticatedRequest('ConfirmDevice', {
       DeviceKey: newDeviceMetadata.DeviceKey,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
@@ -355,7 +355,7 @@ export default class CognitoUser {
 
     finalUserAttributes.NEW_PASSWORD = newPassword;
     finalUserAttributes.USERNAME = this.username;
-    this.client.makeUnauthenticatedRequest('respondToAuthChallenge', {
+    this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', {
       ChallengeName: 'NEW_PASSWORD_REQUIRED',
       ClientId: this.pool.getClientId(),
       ChallengeResponses: finalUserAttributes,
@@ -391,7 +391,7 @@ export default class CognitoUser {
     authParameters.DEVICE_KEY = this.deviceKey;
     authParameters.SRP_A = authenticationHelper.getLargeAValue().toString(16);
 
-    this.client.makeUnauthenticatedRequest('respondToAuthChallenge', {
+    this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', {
       ChallengeName: 'DEVICE_SRP_AUTH',
       ClientId: this.pool.getClientId(),
       ChallengeResponses: authParameters,
@@ -429,7 +429,7 @@ export default class CognitoUser {
       challengeResponses.PASSWORD_CLAIM_SIGNATURE = signatureString;
       challengeResponses.DEVICE_KEY = this.deviceKey;
 
-      this.client.makeUnauthenticatedRequest('respondToAuthChallenge', {
+      this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', {
         ChallengeName: 'DEVICE_PASSWORD_VERIFIER',
         ClientId: this.pool.getClientId(),
         ChallengeResponses: challengeResponses,
@@ -456,7 +456,7 @@ export default class CognitoUser {
    * @returns {void}
    */
   confirmRegistration(confirmationCode, forceAliasCreation, callback) {
-    this.client.makeUnauthenticatedRequest('confirmSignUp', {
+    this.client.makeUnauthenticatedRequest('ConfirmSignUp', {
       ClientId: this.pool.getClientId(),
       ConfirmationCode: confirmationCode,
       Username: this.username,
@@ -484,7 +484,7 @@ export default class CognitoUser {
     challengeResponses.USERNAME = this.username;
     challengeResponses.ANSWER = answerChallenge;
 
-    this.client.makeUnauthenticatedRequest('respondToAuthChallenge', {
+    this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', {
       ChallengeName: 'CUSTOM_CHALLENGE',
       ChallengeResponses: challengeResponses,
       ClientId: this.pool.getClientId(),
@@ -524,7 +524,7 @@ export default class CognitoUser {
       challengeResponses.DEVICE_KEY = this.deviceKey;
     }
 
-    this.client.makeUnauthenticatedRequest('respondToAuthChallenge', {
+    this.client.makeUnauthenticatedRequest('RespondToAuthChallenge', {
       ChallengeName: 'SMS_MFA',
       ChallengeResponses: challengeResponses,
       ClientId: this.pool.getClientId(),
@@ -568,7 +568,7 @@ export default class CognitoUser {
         .NewDeviceMetadata.DeviceGroupKey;
       this.randomPassword = authenticationHelper.getRandomPassword();
 
-      this.client.makeUnauthenticatedRequest('confirmDevice', {
+      this.client.makeUnauthenticatedRequest('ConfirmDevice', {
         DeviceKey: dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey,
         AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
         DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
@@ -603,7 +603,7 @@ export default class CognitoUser {
       return callback(new Error('User is not authenticated'), null);
     }
 
-    this.client.makeUnauthenticatedRequest('changePassword', {
+    this.client.makeUnauthenticatedRequest('ChangePassword', {
       PreviousPassword: oldUserPassword,
       ProposedPassword: newUserPassword,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
@@ -633,7 +633,7 @@ export default class CognitoUser {
     };
     mfaOptions.push(mfaEnabled);
 
-    this.client.makeUnauthenticatedRequest('setUserSettings', {
+    this.client.makeUnauthenticatedRequest('SetUserSettings', {
       MFAOptions: mfaOptions,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, err => {
@@ -657,7 +657,7 @@ export default class CognitoUser {
 
     const mfaOptions = [];
 
-    this.client.makeUnauthenticatedRequest('setUserSettings', {
+    this.client.makeUnauthenticatedRequest('SetUserSettings', {
       MFAOptions: mfaOptions,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, err => {
@@ -680,7 +680,7 @@ export default class CognitoUser {
       return callback(new Error('User is not authenticated'), null);
     }
 
-    this.client.makeUnauthenticatedRequest('deleteUser', {
+    this.client.makeUnauthenticatedRequest('DeleteUser', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, err => {
       if (err) {
@@ -706,7 +706,7 @@ export default class CognitoUser {
       return callback(new Error('User is not authenticated'), null);
     }
 
-    this.client.makeUnauthenticatedRequest('updateUserAttributes', {
+    this.client.makeUnauthenticatedRequest('UpdateUserAttributes', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       UserAttributes: attributes,
     }, err => {
@@ -728,7 +728,7 @@ export default class CognitoUser {
       return callback(new Error('User is not authenticated'), null);
     }
 
-    this.client.makeUnauthenticatedRequest('getUser', {
+    this.client.makeUnauthenticatedRequest('GetUser', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, (err, userData) => {
       if (err) {
@@ -762,7 +762,7 @@ export default class CognitoUser {
       return callback(new Error('User is not authenticated'), null);
     }
 
-    this.client.makeUnauthenticatedRequest('deleteUserAttributes', {
+    this.client.makeUnauthenticatedRequest('DeleteUserAttributes', {
       UserAttributeNames: attributeList,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, err => {
@@ -780,7 +780,7 @@ export default class CognitoUser {
    * @returns {void}
    */
   resendConfirmationCode(callback) {
-    this.client.makeUnauthenticatedRequest('resendConfirmationCode', {
+    this.client.makeUnauthenticatedRequest('ResendConfirmationCode', {
       ClientId: this.pool.getClientId(),
       Username: this.username,
     }, err => {
@@ -866,7 +866,7 @@ export default class CognitoUser {
       authParameters.DEVICE_KEY = this.deviceKey;
     }
 
-    this.client.makeUnauthenticatedRequest('initiateAuth', {
+    this.client.makeUnauthenticatedRequest('InitiateAuth', {
       ClientId: this.pool.getClientId(),
       AuthFlow: 'REFRESH_TOKEN_AUTH',
       AuthParameters: authParameters,
@@ -1008,7 +1008,7 @@ export default class CognitoUser {
    * @returns {void}
    */
   forgotPassword(callback) {
-    this.client.makeUnauthenticatedRequest('forgotPassword', {
+    this.client.makeUnauthenticatedRequest('ForgotPassword', {
       ClientId: this.pool.getClientId(),
       Username: this.username,
     }, (err, data) => {
@@ -1032,7 +1032,7 @@ export default class CognitoUser {
    * @returns {void}
    */
   confirmPassword(confirmationCode, newPassword, callback) {
-    this.client.makeUnauthenticatedRequest('confirmForgotPassword', {
+    this.client.makeUnauthenticatedRequest('ConfirmForgotPassword', {
       ClientId: this.pool.getClientId(),
       Username: this.username,
       ConfirmationCode: confirmationCode,
@@ -1058,7 +1058,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('getUserAttributeVerificationCode', {
+    this.client.makeUnauthenticatedRequest('GetUserAttributeVerificationCode', {
       AttributeName: attributeName,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, (err, data) => {
@@ -1084,7 +1084,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('verifyUserAttribute', {
+    this.client.makeUnauthenticatedRequest('VerifyUserAttribute', {
       AttributeName: attributeName,
       Code: confirmationCode,
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
@@ -1109,7 +1109,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('getDevice', {
+    this.client.makeUnauthenticatedRequest('GetDevice', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       DeviceKey: this.deviceKey,
     }, (err, data) => {
@@ -1134,7 +1134,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('forgetDevice', {
+    this.client.makeUnauthenticatedRequest('ForgetDevice', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       DeviceKey: deviceKey,
     }, err => {
@@ -1178,7 +1178,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('updateDeviceStatus', {
+    this.client.makeUnauthenticatedRequest('UpdateDeviceStatus', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       DeviceKey: this.deviceKey,
       DeviceRememberedStatus: 'remembered',
@@ -1203,7 +1203,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('updateDeviceStatus', {
+    this.client.makeUnauthenticatedRequest('UpdateDeviceStatus', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       DeviceKey: this.deviceKey,
       DeviceRememberedStatus: 'not_remembered',
@@ -1231,7 +1231,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('listDevices', {
+    this.client.makeUnauthenticatedRequest('ListDevices', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
       Limit: limit,
       PaginationToken: paginationToken,
@@ -1256,7 +1256,7 @@ export default class CognitoUser {
       return callback.onFailure(new Error('User is not authenticated'));
     }
 
-    this.client.makeUnauthenticatedRequest('globalSignOut', {
+    this.client.makeUnauthenticatedRequest('GlobalSignOut', {
       AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
     }, err => {
       if (err) {

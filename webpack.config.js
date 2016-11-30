@@ -19,7 +19,7 @@ var banner = '/*!\n' +
 ' */\n\n';
 
 module.exports = {
-  entry: './enhance',
+  entry: './src',
   output: {
     path: 'dist',
     filename: 'amazon-cognito-identity.min.js',
